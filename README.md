@@ -1,2 +1,2 @@
 # DSA
-This is the repo containing some important DSA questions solutions majorly from leetcode
+This is the repo contains some important DSA questions solutions majorly from leetcode
