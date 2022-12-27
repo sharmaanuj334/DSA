@@ -1,22 +1,21 @@
 class Solution {
 public:
-    int sol(int i, int n, vector<int> &nums, int dp[]){
-        if (i >= n) return 0;
+    int sol(int start, int n, vector<int> &nums){
+        int prev = 0;
+        int now = nums[start];
+        for (int i=start+1; i<n; i++){
+            int tmp = now;
+            now = max(nums[i]+prev, now);
+            prev = tmp;
+        }
         
-        if (dp[i] != -1) return dp[i];
-        int pick = nums[i] + sol(i+2, n, nums, dp);
-        int notPick = 0 + sol(i+1, n, nums, dp);
-        
-        return dp[i] = max(pick, notPick);
+        return now;
     }
 public:
     int rob(vector<int>& nums) {
         if (nums.size() == 1) return nums[0];
-        int dp[nums.size()];
-        memset(dp, -1, sizeof(dp));
-        int ans1 = sol(0, nums.size()-1, nums, dp);
-        memset(dp, -1, sizeof(dp));
-        int ans2 = sol(1, nums.size(), nums, dp);
+        int ans1 = sol(0, nums.size()-1, nums);
+        int ans2 = sol(1, nums.size(), nums);
         return max(ans1, ans2);
     }
 };
