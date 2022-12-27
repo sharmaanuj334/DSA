@@ -1,14 +1,11 @@
 class Solution {
-public:  
-int sol(int m, int n, vector<vector<int>> &dp){
-    if (n == 0 && m == 0) return 1;
-    if (n < 0 || m < 0) return 0;
-    if (dp[m][n] != -1) return dp[m][n];
-    return dp[m][n] = sol(m, n-1, dp) + sol(m-1, n, dp);
-}
 public:
-int uniquePaths(int m, int n){
-    vector<vector<int>> dp(m, vector<int> (n, -1));
-    return sol(m-1, n-1, dp);
-}
+    int uniquePaths(int m, int n){
+        long long int upFac = 1;
+        for (int i=min(n, m); i<=m+n-2; i++){
+            upFac *= i;
+            if (i <= n+m-1) upFac /= (i-(min(n, m)-1));
+        }
+        return upFac;
+    }
 };
