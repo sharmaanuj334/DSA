@@ -1,16 +1,22 @@
 class Solution {
-public:
-    int uniquePaths(int m, int n) {
-        int top[n]; 
-        for (int i=0; i<n; i++) top[i] = 1;
-        for (int i=1; i<m; i++){
-            int left = 1;
-            for (int j=1; j<n; j++){
-                int now = top[j] + left;
-                left = now;
-                top[j] = now;
-            }
-        }
-        return top[n-1];
+public:  
+int sol(int m, int n, vector<vector<int>> &dp){
+    if (n == 0 && m == 0) return 1;
+    if (n < 0 || m < 0) return 0;
+    int left = 0, top = 0;
+    if (n >= 1){
+        dp[m][n-1] = (dp[m][n-1] != -1) ? dp[m][n-1] : sol(m, n-1, dp);
+        left = dp[m][n-1];
     }
+    if (m >= 1){
+        dp[m-1][n] = (dp[m-1][n] != -1) ? dp[m-1][n] : sol(m-1, n, dp);
+        top = dp[m-1][n];
+    }
+    return left+top;
+}
+public:
+int uniquePaths(int m, int n){
+    vector<vector<int>> dp(m, vector<int> (n, -1));
+    return sol(m-1, n-1, dp);
+}
 };
