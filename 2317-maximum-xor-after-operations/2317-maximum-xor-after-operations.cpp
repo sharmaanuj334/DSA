@@ -6,10 +6,10 @@ public:
             int c = 0;
             for (int num : nums){
                 if (num & (1<<i)){
-                    c++;
+                    ans += (1<<i);
+                    break;
                 }
             }
-            if (c) ans += (1<<i);
         }
         return ans;
     }
