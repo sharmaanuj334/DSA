@@ -2,13 +2,8 @@ class Solution {
 public:
     int maximumXOR(vector<int>& nums) {
         int ans = 0;
-        for (int i=0; i<32; i++){
-            for (int num : nums){
-                if (num & (1<<i)){
-                    ans += (1<<i);
-                    break;
-                }
-            }
+        for (int num : nums){
+            ans |= num;
         }
         return ans;
     }
