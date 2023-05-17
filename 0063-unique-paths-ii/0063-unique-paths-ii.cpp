@@ -1,26 +1,18 @@
 class Solution {
 private:
-int mazeObstacles(int n, int m, vector<vector<int>> &mat){
-    if (mat[0][0] == 1 || mat[n-1][m-1] == 1) return 0;
-    int top[m]; top[0] = 1;
-    for (int i=1; i<m; i++) top[i] = (!mat[0][i]) ? top[i-1] : 0;
-    for (int i=1; i<n; i++){
-        int left = (!mat[i][0]) ? top[0] : 0;
-        top[0] = left;
-        for (int j=1; j<m; j++){
-            top[j] = (left + top[j]);
-            if (mat[i][j] == 1) top[j] = 0;
-            left = top[j];
-        }
+    int rec(int i, int j, int m, int n, vector<vector<int>> &a, vector<vector<int>> &dp){
+        if (i >= m || j >= n) return 0;
+        if (a[i][j]) return 0;
+        if (i == m-1 && j == n-1) return 1;
+        if (dp[i][j] != -1) return dp[i][j];
+        dp[i][j] = rec(i+1, j, m, n, a, dp) + rec(i, j+1, m, n, a, dp);
+        return dp[i][j];
     }
-    return top[m-1];
-}
-    
-
 public:
     int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
-        int n = obstacleGrid.size();
-        int m = obstacleGrid[0].size();
-        return mazeObstacles(n, m, obstacleGrid);
+        int m = obstacleGrid.size();
+        int n = obstacleGrid[0].size();
+        vector<vector<int>> dp(m, vector<int> (n, -1));
+        return rec(0, 0, m, n, obstacleGrid, dp);
     }
 };
