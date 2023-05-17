@@ -1,11 +1,16 @@
 class Solution {
 public:
     int uniquePaths(int m, int n){
-        long long int upFac = 1;
-        for (int i=min(n, m); i<=m+n-2; i++){
-            upFac *= i;
-            if (i <= n+m-1) upFac /= (i-(min(n, m)-1));
+        int dp[m][n];
+        dp[m-1][n-1] = 1;
+        for (int i=m-1; i>=0; i--){
+            for (int j=n-1; j>=0; j--){
+                if (i == m-1 && j == n-1) continue;
+                dp[i][j] = 0;
+                if (i+1 < m) dp[i][j] += dp[i+1][j];
+                if (j+1 < n) dp[i][j] += dp[i][j+1];
+            }
         }
-        return upFac;
+        return dp[0][0];
     }
 };
