@@ -1,17 +1,14 @@
 class Solution {
+private:
+    int rec(int i, bool take, vector<int> &arr, vector<vector<int>> &dp){
+        if (i == arr.size()) return 0;
+        if (dp[i][take] != -1) return dp[i][take];
+        if (take) return dp[i][take] = max(arr[i], rec(i+1, 1, arr, dp));
+        return dp[i][take] = max(-arr[i] + rec(i+1, 1, arr, dp), rec(i+1, 0, arr, dp));
+    }
 public:
-    int maxProfit(vector<int>& prices) {
-        int n = prices.size();
-        int maxi[n]; maxi[0] = prices[n-1];
-        for (int i=n-1; i>=1; i--){
-            maxi[n-i] = max(maxi[n-i-1], prices[i]);
-        }
-        int ans = 0;
-        int buy = prices[0];
-        for (int i=0; i<n; i++){
-            buy = min(buy, prices[i]);
-            ans = max(maxi[n-1-i]-buy, ans);
-        }
-        return ans;
+    int maxProfit(vector<int>& arr) {
+        vector<vector<int>> dp(arr.size(), vector<int> (2, -1));
+        return rec(0, 0, arr, dp);
     }
 };
