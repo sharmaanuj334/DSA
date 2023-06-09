@@ -5,33 +5,21 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   private:
-  bool detect(int s, vector<int> adj[], vector<bool> &vis){
-        queue<pair<int,int>> q;
-        q.push({s, -1});
-        while (!q.empty()){
-            int par = q.front().first;
-            int gp = q.front().second;
-            q.pop();
-            vis[par] = 1;
-            for (int child : adj[par]){
-                if (vis[child] && child != gp){
-                    return true;
-                } else if (!vis[child]){
-                    q.push({child, par});
-                }
-            }
-        }
-        return false;
+  bool dfs(int par, int gp, vector<int> adj[], vector<bool> &vis){
+      vis[par] = 1;
+      for (int child : adj[par]){
+          if (vis[child] && child != gp) return true;
+          if (!vis[child]) if (dfs(child, par, adj, vis)) return true;
+      }
+      return false;
   }
   public:
     bool isCycle(int V, vector<int> adj[]) {
         vector<bool> vis(V, false);
-        bool c = false;
         for (int i=0; i<V; i++){
-            if (!vis[i]) c |= detect(i, adj, vis);
-            if (c) return true;
+            if (!vis[i]) if(dfs(i, -1, adj, vis)) return true;
         }
-        return c;
+        return false;
     }
 };
 
