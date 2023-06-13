@@ -7,35 +7,30 @@ using namespace std;
 
 // } Driver Code Ends
 class Solution {
-  private:
-    bool dfs(int par, vector<int> adj[], vector<bool> &vis, vector<bool> &path, vector<int> &valid){
-        vis[par] = 1;
-        path[par] = 1;
-        for (int child : adj[par]){
-            if (vis[child] && path[child]) return true;
-            if (vis[child]) continue;
-            if (dfs(child, adj, vis, path, valid) == true){
-                return true;
-            } else{
-                valid.push_back(child);
-            }
-        }
-        path[par] = 0;
-        return false;
-    }
   public:
     vector<int> eventualSafeNodes(int V, vector<int> adj[]){
-        vector<bool> vis(V, false), path(V, false);
-        vector<int> valid;
+        vector<int> inDegree(V, 0);
+        vector<int> g[V];
         for (int i=0; i<V; i++){
-            if (!vis[i]){
-                if (dfs(i, adj, vis, path, valid) == false){
-                    valid.push_back(i);
-                }
+            for (int j=0; j<adj[i].size(); j++){
+                g[adj[i][j]].push_back(i);
+                inDegree[i]++;
+            } 
+        }
+        queue<int> q;
+        for (int i=0; i<V; i++) if (inDegree[i] == 0) q.push(i);
+        vector<int> ans;
+        while (!q.empty()){
+            int par = q.front();
+            ans.push_back(par);
+            q.pop();
+            for (int child : g[par]){
+                inDegree[child]--;
+                if (inDegree[child] == 0) q.push(child);
             }
         }
-        sort(valid.begin(), valid.end());
-        return valid;
+        sort(ans.begin(), ans.end());
+        return ans;
     }
 };
 
