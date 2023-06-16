@@ -17,6 +17,7 @@ class Solution {
             int i = pq.top().second.first;
             int j = pq.top().second.second;
             pq.pop();
+            if (i == n-1 && j == m-1) return val[i][j];
             for (int f=0; f<4; f++){
                 int x = i + a[f];
                 int y = j + b[f];
@@ -28,7 +29,6 @@ class Solution {
                 }
             }
         }
-        return val[n-1][m-1];
     }
 };
 
