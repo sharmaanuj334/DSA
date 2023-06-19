@@ -9,21 +9,16 @@ using namespace std;
 class Solution {
   public:
     void rec(int start, vector<int> &dist, vector<int> &a){
-        vector<bool> vis(100000, 0);
         queue<int> q;
         q.push(start);
         while (!q.empty()){
             int par = q.front();
             q.pop();
-            vis[par] = 0;
             for (int i=0; i<a.size(); i++){
                 int child = (par * a[i]) % 100000;
                 if (dist[child] > dist[par]+1){
                     dist[child] = dist[par]+1;
-                    if (!vis[child]){
-                        q.push(child);
-                        vis[child] = 1;
-                    }
+                    q.push(child);
                 }
             }
         }
