@@ -4,32 +4,34 @@ using namespace std;
 
 
 // } Driver Code Ends
-//User function Template for C++
-
 class Solution {
-  private:
-    void dfs(int par, bool vis[], vector<int> g[]){
-        vis[par] = 1;
-        for (int child : g[par]){
-            if (vis[child]) continue;
-            dfs(child, vis, g);
-        }
-    }
   public:
+    int find(int a, vector<int> &par){
+        if (par[a] == a) return a;
+        return par[a] = find(par[a], par);
+    }
+    void UnionSize(int a, int b, vector<int> &size, vector<int> &par){
+        int par_a = find(a, par);
+        int par_b = find(b, par);
+        if (par_a == par_b) return;
+        if (size[par_a] < size[par_b]) swap(par_a, par_b);
+        par[par_b] = par_a;
+        size[par_a] += size[par_b];
+    }
     int numProvinces(vector<vector<int>> adj, int V) {
-        vector<int> g[V];
+        vector<int> par(V), size(V);
+        for (int i=0; i<V; i++){
+            par[i] = i;
+            size[i] = 1;
+        }
         for (int i=0; i<adj.size(); i++){
             for (int j=0; j<adj[i].size(); j++){
-                if (adj[i][j] == 1 && i != j){
-                    g[i].push_back(j);
-                    g[j].push_back(i);
+                if (adj[i][j]){
+                    UnionSize(i, j, size, par);
                 }
             }
         }
-        bool vis[V];
-        memset(vis, false, sizeof(vis));
-        int c = 0;
-        for (int i=0; i<V; i++) if (!vis[i]) dfs(i, vis, g), c++;
+        int c = 0; for (int i=0; i<V; i++) if (find(i, par) == i) c++;
         return c;
     }
 };
