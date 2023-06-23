@@ -35,30 +35,18 @@ class Solution{
                 }
             }
         }
-        map<int, vector<int>> c;
-        for (int i=0; i<n; i++){
-            int p = find(i, par);
-            c[p].push_back(i);
+        vector<string> tmp[n];
+        for (auto it : m){
+            string s = it.first;
+            int node = find(it.second-1, par);
+            tmp[node].push_back(s);
         }
         vector<vector<string>> ans;
-        vector<bool> vis(n, false);
         for (int i=0; i<n; i++){
-            if (vis[i]) continue;
-            vis[i] = 1;
-            int p = find(i, par);
-            vector<string> v = {accounts[p][0]};
-            for (int child : c[p]){
-                vis[child] = 1;
-                for (int j=1; j<accounts[child].size(); j++){
-                    string s = accounts[child][j];
-                    if (m[s]){
-                        v.push_back(s);
-                        m[s] = 0;
-                    }
-                }
-            }
-            sort(v.begin(), v.end());
-            ans.push_back(v);
+            if (tmp[i].size() == 0) continue;
+            sort(tmp[i].begin(), tmp[i].end());
+            tmp[i].insert(tmp[i].begin(), accounts[i][0]);
+            ans.push_back(tmp[i]);
         }
         return ans;
     }
