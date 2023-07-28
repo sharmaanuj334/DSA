@@ -3,25 +3,25 @@
 using namespace std;
 
 // } Driver Code Ends
-class Solution{
+class Solution {
   public:
-    bool dfs(int par, vector<int> adj[], vector<bool> &vis, vector<bool> &path){
+    bool dfs(int par, int vis[], int path[], vector<int> g[]){
         vis[par] = 1;
         path[par] = 1;
-        for (int child : adj[par]){
+        for (int child : g[par]){
             if (vis[child] && path[child]) return true;
             if (vis[child]) continue;
-            if (dfs(child, adj, vis, path)) return true;
+            // path[child] = 1;
+            if (dfs(child, vis, path, g)) return true;
         }
         path[par] = 0;
         return false;
     }
-    bool isCyclic(int V, vector<int> adj[]) {
-        vector<bool> vis(V, false), path(V, false);
-        for (int i=0; i<V; i++){
-            if (!vis[i]){
-                if (dfs(i, adj, vis, path)) return true;
-            }
+    bool isCyclic(int n, vector<int> adj[]){
+        int vis[n]; int path[n];
+        memset(vis, 0, sizeof(vis)); memset(vis, 0, sizeof(vis));
+        for (int i=0; i<n; i++){
+            if (!vis[i]) if (dfs(i, vis, path, adj)) return true;
         }
         return false;
     }
