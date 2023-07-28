@@ -5,27 +5,26 @@ using namespace std;
 // } Driver Code Ends
 class Solution{
 	public:
-	vector<int> bfs(queue<int> &q, vector<int> &inDegree, vector<int> adj[]){
-	    vector<int> ans;
-	    while (!q.empty()){
-	        int par = q.front();
-	        q.pop();
-	        ans.push_back(par);
-	        for (int child : adj[par]){
-	            inDegree[child]--;
-	            if (inDegree[child] == 0) q.push(child);
-	        }
+	void dfs(int par, vector<int> adj[], bool vis[], stack<int> &s){
+	    vis[par] = 1;
+	    for (int child : adj[par]){
+	        if (vis[child]) continue;
+	        dfs(child, adj, vis, s);
 	    }
-	    return ans;
+	    s.push(par);
 	}
 	vector<int> topoSort(int V, vector<int> adj[]){
-	    vector<int> inDegree(V, 0);
+	    bool vis[V]; memset(vis, 0, sizeof(vis));
+	    stack<int> s;
 	    for (int i=0; i<V; i++){
-	        for (int it : adj[i]) inDegree[it]++;
+	        if (!vis[i]) dfs(i, adj, vis, s);
 	    }
-	    queue<int> q;
-	    for (int i=0; i<V; i++) if (inDegree[i] == 0) q.push(i);
-	    return bfs(q, inDegree, adj);
+	    vector<int> ans;
+	    while (!s.empty()){
+	        ans.push_back(s.top());
+	        s.pop();
+	    }
+	    return ans;
 	}
 };
 
